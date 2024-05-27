@@ -1,0 +1,205 @@
+databaseChangeLog:
+  - changeSet:
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: users
+      id: "0001"
+      author: Ihor Soroka
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changed_at
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: valid_until
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: username
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client
+                  type: text
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: workouts
+      id: "0002"
+      author: Ihor Soroka
+      changes:
+        - createTable:
+            tableName: workouts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changed_at
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: valid_until
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: name
+                  type: text
+              - column:
+                  name: started_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: finished_at
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+
+        - addForeignKeyConstraint:
+            constraintName: fk_workout_user
+            baseTableName: workouts
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: exercises
+      id: "0003"
+      author: Ihor Soroka
+      changes:
+        - createTable:
+            tableName: exercises
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changed_at
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: valid_until
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: name
+                  type: text
+
+  - changeSet:
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: sets
+      id: "0004"
+      author: Ihor Soroka
+      changes:
+        - createTable:
+            tableName: sets
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changed_at
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: valid_until
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: repeats
+                  type: bigint
+              - column:
+                  name: measurement_unit
+                  type: text
+              - column:
+                  name: amount
+                  type: bigint
+              - column:
+                  name: exercise_id
+                  type: bigint
+              - column:
+                  name: workout_id
+                  type: bigint
+
+        - addForeignKeyConstraint:
+            constraintName: fk_sets_exercise
+            baseTableName: sets
+            baseColumnNames: exercise_id
+            referencedTableName: exercises
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_sets_workout
+            baseTableName: workouts
+            baseColumnNames: workout_id
+            referencedTableName: workouts
+            referencedColumnNames: id
